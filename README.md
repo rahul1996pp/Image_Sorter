@@ -13,6 +13,6 @@ To install dependencies:
 `pip install -r requirements.txt`
 
 How to run script:
- `python imgsep.py`
+ `python image_sorter.py`
 
 **Buy me a coffee : [click here](https://www.paypal.me/RahulPujari "Pay")**
