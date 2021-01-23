@@ -6,9 +6,9 @@
 - The images withhout faces are stored in no_face folder.
 - We can use CV2 or cvlib or face recogniton module to process image.
 - CV2 is faster than face recogniton module.
-- In cv2 option you need to enter haarcascade_frontalface_default.xml or custom.xml for face detection.
-- you need to enter haarcascade_eye.xml for eye detection.
-- To increase accuracy results i made image classification by cv2 if both face and eye is detetcted then it is valid image.
+- In cv2 option you need to enter haarcascade_frontalface_default.xml or custom.xml location for face detection.
+- you need to enter haarcascade_eye.xml location for eye detection.
+- To increase accuracy results i made image classification in cv2 that if both face and eye is detetcted then it is valid image.
 - Face recogniton is accurate than CV2.
 - cvlib is faster and accurate as it uses GPU.
 - Run the script and let the script do the magic for you.
