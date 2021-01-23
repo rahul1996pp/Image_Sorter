@@ -3,3 +3,5 @@ dlib
 face-recognition
 Pillow
 cv2
+cvlib
+tensorflow
