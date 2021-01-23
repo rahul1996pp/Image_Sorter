@@ -4,6 +4,7 @@ import subprocess
 import time
 import cv2
 import face_recognition
+import cvlib as cv
 
 
 def folder_list():
@@ -24,19 +25,8 @@ def folder_files_list(dirpath):
             img_cv2(os.path.join(dirpath, file))
         elif choice == '2':
             img_rec(os.path.join(dirpath, file))
-
-
-def img_cv2(image):
-    global cv_f_num, cv_n_num, face_cascade
-    gray = cv2.imread(image)
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=2, minNeighbors=4, flags=cv2.CASCADE_SCALE_IMAGE)
-    if len(faces) == 0:
-        cv_f_num += 1
-        img_move(image, "faces")
-    else:
-        cv_n_num += 1
-        img_move(image, "no_face")
-    return cv_f_num, cv_n_num
+        elif choice == '3':
+            img_cv_lib(os.path.join(dirpath, file))
 
 
 def img_move(file, folder):
@@ -44,13 +34,9 @@ def img_move(file, folder):
 
 
 def img_folder():
-    if os.path.exists("no_face"):
-        pass
-    else:
+    if not os.path.exists("no_face"):
         os.mkdir("no_face")
-    if os.path.exists("faces"):
-        pass
-    else:
+    if not os.path.exists("faces"):
         os.mkdir("faces")
 
 
@@ -67,6 +53,49 @@ def img_rec(image):
         img_move(image, "no_face")
 
 
+def img_cv2(image):
+    global cv_f_num, cv_n_num, face_cascade, eye_cascade
+    gray = cv2.imread(image)
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=2, minNeighbors=4, flags=cv2.CASCADE_SCALE_IMAGE)
+    eyes = face_cascade.detectMultiScale(gray, scaleFactor=2, minNeighbors=4, flags=cv2.CASCADE_SCALE_IMAGE)
+    if (len(faces) and len(eyes)) != 0:
+        cv_f_num += 1
+        img_move(image, "faces")
+    else:
+        cv_n_num += 1
+        img_move(image, "no_face")
+
+
+def img_cv_lib(image):
+    global cv_lib_f_num, cv_lib_n_num
+    face = cv2.imread(image)
+    bbox, label, conf = cv.detect_common_objects(face)
+    if 'person' in label:
+        cv_lib_f_num += 1
+        img_move(image, "faces")
+    else:
+        cv_lib_n_num += 1
+        img_move(image, "no_face")
+
+
+def cascpath_set():
+    f_cascpath = input("[+] Enter haarcascade_frontalface_default.xml path for cv2 or press enter if you want me to search for you :- ").replace('"',"")
+    if f_cascpath == '':
+        print("[~] Searching for haarcascade_frontalface_default.xml.....")
+        f_cascpath = subprocess.check_output("where /r c:\  haarcascade_frontalface_default.xml").strip()
+        f_cascpath = str(f_cascpath).split("'")[1]
+    e_cascpath = input("[+] Enter haarcascade_eye.xml path for cv2 or press enter if you want me to search for you :- ").replace('"',"")
+    if e_cascpath == '':
+        print("[~] Searching for haarcascade_eye.xml.....")
+        e_cascpath = subprocess.check_output("where /r c:\  haarcascade_eye.xml").strip()
+        e_cascpath = str(e_cascpath).split("'")[1]
+    else:
+        print("[-] File not found")
+    global face_cascade, eye_cascade
+    face_cascade = cv2.CascadeClassifier(f_cascpath)
+    eye_cascade = cv2.CascadeClassifier(e_cascpath)
+
+
 def choice():
     global choice
     print("""
@@ -78,21 +107,18 @@ def choice():
     *                                        *
     *    [2] Face recognition                *
     *                                        *
+    *    [3] Cvlib                           *
+    *                                        *
     ******************************************
     """)
     choice = input("[+] Enter your choice :- ")
     if choice == '1':
-        print("[*] Using cv2 processing images")
-        cascpath = input("[+] Enter xml path for cv2 or press enter if you want me to search for you :- ").replace('"', "")
-        if cascpath == '':
-            print("[~] Searching for file.....")
-            cascpath = subprocess.check_output("where /r c:\  haarcascade_frontalface_default.xml").strip()
-            cascpath = str(cascpath).split("'")[1]
-        global face_cascade
-        face_cascade = cv2.CascadeClassifier(cascpath)
+        print("[*] Using cv2 for processing images")
+        cascpath_set()
     elif choice == '2':
-        print("[*] Using face recognition processing images")
-
+        print("[*] Using face recognition for processing images")
+    elif choice == '3':
+        print("[*] Using cvlib for processing images ")
 
 def credit():
     print("""
@@ -111,6 +137,15 @@ def credit():
 """)
 
 
+def img_details():
+    if reg_f_num != 0 or reg_n_num != 0:
+        print('[*] Using face module \n[+] faces are :- {}\n[-] no faces are :- {}'.format(reg_f_num, reg_n_num))
+    elif cv_f_num != 0 or cv_n_num != 0:
+        print('[*] Using cv2 \n[+] faces are :- {}\n[-] no faces are :- {}'.format(cv_f_num, cv_n_num))
+    elif cv_lib_f_num != 0 or cv_lib_n_num != 0:
+        print('[*] Using cvlib \n[+] faces are :- {}\n[-] no faces are :- {}'.format(cv_lib_f_num, cv_lib_n_num))
+
+
 def main():
     img_folder()
     choice()
@@ -119,13 +154,10 @@ def main():
     print("[*] Time taken to process images is -",
           time.strftime("%H:%M:%S", time.gmtime(int('{:.0f}'.format(float(str(time_output)))))))
     print("[~] Successfully completed [~]")
-    if (cv_n_num == 0) or (cv_n_num == 0):
-        print('[*] Using face module \n[+] faces are :- {}\n[-] no faces are :- {}'.format(reg_f_num, reg_n_num))
-    else:
-        print('[*] Using cv2 \n[+] faces are :- {}\n[-] no faces are :- {}'.format(cv_f_num, cv_n_num))
+    img_details()
 
 
-cv_n_num, cv_f_num, reg_n_num, reg_f_num, num = 0, 0, 0, 0, 0
+cv_n_num, cv_f_num, reg_n_num, reg_f_num, cv_lib_f_num, cv_lib_n_num, num = 0, 0, 0, 0, 0, 0, 0
 try:
     credit()
     start_time = time.time()
