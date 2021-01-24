@@ -13,7 +13,7 @@
 -Dlib(hog) is fast and accurate.
 - Run the script and let the script do the magic for you.
 
-## # Overview of all modulesOverview of all modules
+## # Overview of all modules
 
 | Modules  | Speed  | Accuracy  |
 | :------------: | :------------: | :------------: |
