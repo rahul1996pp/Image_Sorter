@@ -21,7 +21,7 @@
 | Face recognition  |  Slow | High  |
 | Cvlib  |  Fast | High  |
 | Dlib(cnn Face detector)  | Very slow  | Very high  |
-| Dlib(hog face detector) | Fast | High |
+| Dlib(hog face detector) | Fast | Medium |
 
 To install dependencies:
 `pip install -r requirements.txt`
