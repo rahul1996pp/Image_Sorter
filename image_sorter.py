@@ -88,8 +88,7 @@ def img_cv_lib(image):
 
 
 def img_dlib_cnn(image):
-    global dlib_cnn_f_num, dlib_cnn_n_num
-    cnn_face_detector = dlib.cnn_face_detection_model_v1('data/mmod_human_face_detector.dat')
+    global dlib_cnn_f_num, dlib_cnn_n_num, cnn_face_detector
     image_file = cv2.imread(image)
     faces_cnn = cnn_face_detector(image_file, 1)
     if len(faces_cnn) != 0:
@@ -112,7 +111,7 @@ def img_dlib_hog(image):
         img_move(image, "no_face")
 
 def choice():
-    global choice,face_cascade, eye_cascade
+    global choice,face_cascade, eye_cascade, cnn_face_detector
     print("""
     ******************************************
     *                MENU                    *
@@ -141,6 +140,7 @@ def choice():
         print("[*] Using cvlib for processing images")
     elif choice == '4':
         print("[*] using dlib(cnn Face detector) for processing images")
+        cnn_face_detector = dlib.cnn_face_detection_model_v1('data/mmod_human_face_detector.dat')
     elif choice == '5':
         print("[*] using dlib(Hog Face detector) for processing images")
 
