@@ -10,10 +10,10 @@
 - Face recogniton is accurate than CV2.
 - cvlib is faster and accurate as it uses GPU.
 - Dlib(cnn) is very slow but most accurate .
--Dlib(hog) is fast and accurate.
+- Dlib(hog) is fast and accurate.
 - Run the script and let the script do the magic for you.
 
-## # Overview of all modules
+## Overview of all modules
 
 | Modules  | Speed  | Accuracy  |
 | :------------: | :------------: | :------------: |
