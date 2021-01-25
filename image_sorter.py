@@ -1,6 +1,5 @@
 import os
 import shutil
-import subprocess
 import time
 import cv2
 import face_recognition
