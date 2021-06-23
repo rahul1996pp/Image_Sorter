@@ -2,6 +2,6 @@ cmake
 dlib
 face-recognition
 Pillow
-cv2
+opencv-python
 cvlib
 tensorflow
