@@ -5,7 +5,7 @@ from os import mkdir
 from shutil import move
 from colorama import Fore, init, Style
 from face_recognition import load_image_file, face_locations, face_encodings
-from cv2 import imread, CascadeClassifier, CASCADE_SCALE_IMAGE
+from cv2 import imread, CascadeClassifier, CASCADE_SCALE_IMAGE, resize
 from time import time
 from cvlib import detect_common_objects
 from dlib import get_frontal_face_detector, cnn_face_detection_model_v1
@@ -67,7 +67,7 @@ def img_cv_lib(image):
 
 def img_dlib(image):
     global faces_num, no_faces_num, cnn_face_detector
-    image_file = imread(image)
+    image_file = resize(imread(str(image)), (224, 224))
     if choice == "5":
         hog = get_frontal_face_detector()
         faces = hog(image_file, 1)
