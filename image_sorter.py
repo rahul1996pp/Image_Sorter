@@ -22,7 +22,7 @@ def folder_list():
         folder_list()
     img = glob(f'{folder}/**/*.jpg', recursive=True) + (glob(f'{folder}/**/*.png', recursive=True)) + (glob(f'{folder}/**/*.jpeg', recursive=True))
     if not (img) or (len(img)==0):
-        print("{red}[+] Folder is empty or incorrect folder name try again with new folder")
+        print(f"{red}[+] Folder is empty or incorrect folder name try again with new folder")
         folder_list()
     img_process = {'1': img_cv2, '2': img_rec, '3': img_cv_lib, '4': img_dlib, '5': img_dlib}
     print(f"{green}[+] Total files in folder are {len(img)}")
